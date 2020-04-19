@@ -25,6 +25,11 @@ public class Auto extends LinearOpMode {
 
         waitForStart();
 
+        // prevents a robot stop and restart when stop is pressed right after initialization finishes
+        if (isStopRequested()) {
+            return;
+        }
+
         while(!isStopRequested()){
 
             switch (state){
