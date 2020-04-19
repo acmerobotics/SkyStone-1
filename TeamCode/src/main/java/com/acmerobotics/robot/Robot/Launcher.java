@@ -1,4 +1,4 @@
-package com.acmerobotics.robot;
+package com.acmerobotics.robot.Robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
