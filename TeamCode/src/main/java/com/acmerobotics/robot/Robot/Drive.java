@@ -569,7 +569,7 @@ public class Drive {
 
     public double turnError(double targetAngle) {
         setDegrees(targetAngle);
-        return Math.abs(getDegrees()) - Math.abs(getAngle());
+        return getDegrees() - getAngle();
     }
 
     public void turnTo(String direction, double angle) {
@@ -577,22 +577,21 @@ public class Drive {
 
         if (direction.equals("left")) {
             error = turnError(angle);
-            error = error * -1;
 
             double correction = turnP(error);
 
             motors[0].setPower(correction);
-            motors[1].setPower(-correction);
-            motors[2].setPower(correction);
+            motors[1].setPower(correction);
+            motors[2].setPower(-correction);
             motors[3].setPower(-correction);
         } else {
             error = turnError(angle);
             double correction = turnP(error);
 
-            motors[0].setPower(-correction);
+            motors[0].setPower(correction);
             motors[1].setPower(correction);
             motors[2].setPower(-correction);
-            motors[3].setPower(correction);
+            motors[3].setPower(-correction);
         }
 
 

@@ -61,12 +61,7 @@ public class Auto extends LinearOpMode {
                     time.reset();
 
                     // delay to let ball move through gate
-                    if (time.seconds() < 1){
-                        // wait
-                    }
-
-                    else {
-
+                    if (time.seconds() > 1){
                         // close
                         launcher.closeGate();
 
