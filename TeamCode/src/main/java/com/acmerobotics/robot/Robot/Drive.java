@@ -103,10 +103,10 @@ public class Drive {
             omniTracker = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             omniTracker.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            motors[0].setDirection(DcMotorEx.Direction.FORWARD);
-            motors[1].setDirection(DcMotorEx.Direction.FORWARD);
-            motors[2].setDirection(DcMotorEx.Direction.REVERSE);
-            motors[3].setDirection(DcMotorEx.Direction.REVERSE);
+            motors[0].setDirection(DcMotorEx.Direction.FORWARD); // should be reversed
+            motors[1].setDirection(DcMotorEx.Direction.FORWARD); // should be reversed
+            motors[2].setDirection(DcMotorEx.Direction.REVERSE); // should be forward
+            motors[3].setDirection(DcMotorEx.Direction.REVERSE); // should be forward
 
         } else {
 
