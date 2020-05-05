@@ -24,14 +24,20 @@ public class TeleOp extends LinearOpMode {
             launcher.update();
 
             if (gamepad1.right_trigger > 0.1){
+                launcher.openGate();
+
                 launcher.fire();
             }
 
             else{
+                launcher.closeGate();
+
                 launcher.firing = false;
             }
 
             if (gamepad1.x){
+                launcher.closeGate();
+
                 launcher.stopMotors();
             }
 

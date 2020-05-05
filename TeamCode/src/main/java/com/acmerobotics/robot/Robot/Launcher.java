@@ -189,7 +189,6 @@ public class Launcher {
 
         sleepPID();
 
-        closeGate();
         setTargetVelocity(sleepVelocity);
 
     }
