@@ -21,6 +21,10 @@ public class Launcher {
                                     // take as long to get to full speed. I could also just have the wheels always
                                     // running at full but that would take up battery power and wouldn't be as fun to build.
 
+                                    // I think there are 3 reasons this works 1) static friction won't be as much of a problem bc the wheels are
+                                      // already in motion 2) getting to a velocity from 0 to 10 takes more time then 5 to 10 3) I think (80% sure) the inertia of the
+                                      // wheels will also be less of a problem bc they are already in motion meaning ... (more physics stuff I'll finish the explaination later)
+
     public DcMotorEx LMotor, RMotor;
 
     public double targetVelocity = 0;
@@ -29,7 +33,7 @@ public class Launcher {
 
     public boolean firing = false;
 
-    private boolean isStopped = false;
+    public boolean isStopped = false;
 
 
     /**
@@ -196,7 +200,11 @@ public class Launcher {
         // time to ramp up.
 
         if (!firing && !isStopped){
-            sleepMotors();
+
+            if (needSleep()){
+                sleepMotors();
+            }
+
         }
     }
 
@@ -224,17 +232,27 @@ public class Launcher {
         setPID(10, 5, 3);
     }
 
+    public boolean needSleep(){
+        // check if the velocity has lowered more than the sleep velocity. if so then maintain the
+        // sleep velocity. This will make the system more efficient bc it doesn't have to fight
+        // the flywheels to lower its velocity instead it will wait until it lowers its self and the
+        // motors wont start doing work until the velocity is lower than the sleep velocity.
+
+        double currentVelocity = LMotor.getVelocity();
+
+        if (currentVelocity < sleepVelocity){
+            return true;
+        }
+
+        else{
+            return false;
+        }
+    }
+
 
     public void sleepPID(){
-
-        // this PID controller can be slow it does not really matter, actually slower is better.
-        // if the finger of the user accidenly slips a fast PID controller will drive the velocity of the
-        // flywheel down quickly which will result in a longer amount of time to bring them back up.
-        // If the PID controller is slow then a accident would be ok bc the PID controller would slowly drive the
-        // velocity down, meaning the velocity can also quickly be brought up without wasting time ramping.
-        // I think there are 3 reasons this works 1) static friction won't be as much of a problem bc the wheels are
-        // already in motion 2) getting to a velocity from 0 to 10 takes more time then 5 to 10 3) I think (80% sure) the inertia of the
-        // wheels will also be less of a problem bc they are already in motion meaning ... (more physics stuff I'll finish the explaination later)
+        // slower pid bc it doesn't really matter if the velocity is off. the most important pid
+        // controller is the one for firing
 
         setPID(5, 2, 1);
     }
