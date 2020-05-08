@@ -34,11 +34,9 @@ public class Autonomous extends LinearOpMode {
 
                     if(drive.atLinearPos()){
                         drive.stopMotors();
-
-                    } else {
-
                         drive.resetAngle();
                         state++;
+
                     }
 
                     break;
@@ -48,7 +46,6 @@ public class Autonomous extends LinearOpMode {
 
                     drive.setDegrees(-30);
 
-                    drive.getDegrees();
 
                     if(drive.getAngle() == 0) {
                         drive.clockwise();
@@ -91,6 +88,17 @@ public class Autonomous extends LinearOpMode {
 
                 case 4:
 
+                    if(launcher.isRamping()){
+
+                        state++;
+
+                    }
+
+                    break;
+
+
+                case 5:
+
                    if (launcher.isRunning()){
 
                        launcher.openGate();
@@ -102,11 +110,10 @@ public class Autonomous extends LinearOpMode {
                    break;
 
 
-                case 5:
+                case 6:
 
                     drive.setDegrees(-60);
 
-                    drive.getDegrees();
 
                     if(drive.getAngle() == 0) {
                         drive.clockwise();
@@ -138,7 +145,7 @@ public class Autonomous extends LinearOpMode {
 
                     break;
 
-                case 6:
+                case 7:
 
                     drive.resetEncoders();
                     state++;
@@ -146,14 +153,14 @@ public class Autonomous extends LinearOpMode {
                     break;
 
 
-                case 7:
+                case 8:
 
                     drive.goToPosition(36, 0.5);
                     state++;
 
                     break;
 
-                case 8:
+                case 9:
 
                     if(drive.atLinearPos()){
                         drive.stopMotors();

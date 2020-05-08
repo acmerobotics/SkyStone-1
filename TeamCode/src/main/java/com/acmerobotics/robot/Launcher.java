@@ -1,7 +1,10 @@
 package com.acmerobotics.robot;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Interface for a mechanism to launch balls.
@@ -12,6 +15,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  */
 public class Launcher {
 
+    private DcMotorEx leftMotor;
+    private DcMotorEx rightMotor;
+    private Servo gate;
+
+    private double targetVelocity = 0;
+
+    private double gateOpen = 0.3;
+    private double gateClosed = 0.7; //arbitrary numbers doesn't really matter what they are
+
+    private boolean isGateOpen = false;
+
     /**
      * Constructor for a Launcher.
      *
@@ -19,6 +33,18 @@ public class Launcher {
      * @param hardwareMap
      */
     public Launcher(HardwareMap hardwareMap) {
+
+        leftMotor = hardwareMap.get(DcMotorEx.class, "leftMotor");
+        rightMotor = hardwareMap.get(DcMotorEx.class, "rightMotor");
+
+        gate = hardwareMap.get(Servo.class, "gate");
+
+        leftMotor.setDirection(DcMotorEx.Direction.FORWARD);
+        rightMotor.setDirection(DcMotorEx.Direction.REVERSE);
+
+        leftMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        rightMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
 
     }
 
@@ -28,6 +54,9 @@ public class Launcher {
      */
     public void setMode(DcMotor.RunMode runMode) {
 
+        leftMotor.setMode(runMode);
+        rightMotor.setMode(runMode);
+
     }
 
     /**
@@ -35,6 +64,10 @@ public class Launcher {
      * @param power the power for the flywheel motors
      */
     public void setPower(double power) {
+
+        leftMotor.setPower(power);
+        rightMotor.setPower(power);
+
 
     }
 
@@ -44,6 +77,17 @@ public class Launcher {
      */
     public void setTargetVelocity(double velocity) {
 
+        leftMotor.setVelocity(velocity);
+        rightMotor.setVelocity(velocity);
+
+        targetVelocity = velocity;
+
+    }
+
+    public void stopMotors() {
+
+        leftMotor.setPower(0);
+        rightMotor.setPower(0);
     }
 
     /**
@@ -51,7 +95,20 @@ public class Launcher {
      * @return true, if the flywheel motors are ramping up to the target velocity
      */
     public boolean isRamping() {
-        return false;
+
+        double currentVelocity = (leftMotor.getVelocity() + rightMotor.getVelocity()) / 2;
+
+
+        if(targetVelocity > 0 && currentVelocity != targetVelocity){
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
     }
 
     /**
@@ -59,7 +116,18 @@ public class Launcher {
      * @return  true, if the launcher is running
      */
     public boolean isRunning() {
-        return false;
+
+        double currentPower = (leftMotor.getPower() + rightMotor.getPower()) / 2;
+
+        if(currentPower > 0){
+
+            return true;
+
+        } else {
+
+            return false;
+        }
+
     }
 
     /**
@@ -67,7 +135,16 @@ public class Launcher {
      * @return  true, if the gate is open.
      */
     public boolean isGateOpen() {
-        return false;
+
+        if(isGateOpen){
+
+            return false;
+
+        } else {
+
+            return true;
+        }
+
     }
 
     /**
@@ -75,12 +152,18 @@ public class Launcher {
      */
     public void openGate() {
 
+        gate.setPosition(gateOpen);
+        isGateOpen = true;
+
     }
 
     /**
      * Closes the gate so balls are not sent into the flywheels.
      */
     public void closeGate() {
+
+        gate.setPosition(gateClosed);
+        isGateOpen = false;
 
     }
 }
