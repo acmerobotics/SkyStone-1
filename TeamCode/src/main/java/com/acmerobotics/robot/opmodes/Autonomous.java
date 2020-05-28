@@ -88,26 +88,22 @@ public class Autonomous extends LinearOpMode {
 
                 case 4:
 
-                    if(launcher.isRamping()){
+                    launcher.firstShot();
+                    state++;
 
+                   break;
+
+
+                case 5:
+
+                    if(launcher.isShotTaken()){
+
+                        drive.resetAngle();
                         state++;
 
                     }
 
                     break;
-
-
-                case 5:
-
-                   if (launcher.isRunning()){
-
-                       launcher.openGate();
-                       drive.resetAngle();
-                       state++;
-
-                   }
-
-                   break;
 
 
                 case 6:

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Interface for a mechanism to launch balls.
@@ -14,6 +15,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  * that releases a ball into the flywheels to be launched.
  */
 public class Launcher {
+
+    private ElapsedTime time;
 
     private DcMotorEx leftMotor;
     private DcMotorEx rightMotor;
@@ -25,6 +28,7 @@ public class Launcher {
     private double gateClosed = 0.7; //arbitrary numbers doesn't really matter what they are
 
     private boolean isGateOpen = false;
+    private boolean isShotTaken = true;
 
     /**
      * Constructor for a Launcher.
@@ -33,6 +37,8 @@ public class Launcher {
      * @param hardwareMap
      */
     public Launcher(HardwareMap hardwareMap) {
+
+        time = new ElapsedTime();
 
         leftMotor = hardwareMap.get(DcMotorEx.class, "leftMotor");
         rightMotor = hardwareMap.get(DcMotorEx.class, "rightMotor");
@@ -75,6 +81,9 @@ public class Launcher {
      * Sets the target velocity for the launcher motors.
      * @param velocity  the target velocity for the flywheel motors
      */
+
+    //I'm so confused. How are you supposed to set velocity? I get it with the drivetrain, but
+    // there isn't a direction really??? and what would the unit even be idk.
     public void setTargetVelocity(double velocity) {
 
         leftMotor.setVelocity(velocity);
@@ -164,6 +173,60 @@ public class Launcher {
 
         gate.setPosition(gateClosed);
         isGateOpen = false;
+
+    }
+
+    public void delay(int ms){
+        long startTime = System.currentTimeMillis();
+        while((System.currentTimeMillis() - startTime) > ms){
+            Thread.yield();
+        }
+
+    }
+
+    public boolean isShotTaken(){
+
+        if (isShotTaken){
+
+            return true;
+
+        } else {
+            return false;
+        }
+    }
+
+    public void firstShot(){
+
+        isShotTaken = false;
+
+        double velocity = 1; //idk it equals something i just don't know what it equals
+
+        setPower(1);
+        setTargetVelocity(velocity);
+
+        if(isRunning() && !isRamping()){
+
+            openGate();
+
+            delay(2000); //waiting until ball is launched
+
+            closeGate();
+
+            isShotTaken = true;
+
+
+        }
+
+
+    }
+
+    public void subsequentShots(){
+        openGate();
+
+        delay(2000);
+
+        closeGate();
+
 
     }
 }
